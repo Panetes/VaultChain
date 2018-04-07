@@ -26,10 +26,9 @@ namespace TrusChain.Storage
             {
                 _path = @"D:\";
             }
-            
         }
 
-        public void Init()
+        public IpfsWrapper Init()
         {
             try
             {
@@ -57,7 +56,7 @@ namespace TrusChain.Storage
                
             }
 
-  
+            return this;
         }
 
         private void StartDaemon()

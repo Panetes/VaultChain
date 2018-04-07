@@ -74,6 +74,19 @@ namespace TrusChain.Storage
 
             Thread.Sleep(3000);
 
+            int max = 0;
+            while(Process.GetProcessesByName("ipfs_daemon").ToArray().Count() == 0)
+            {
+                Console.WriteLine("Fetching Daemon...");
+                Thread.Sleep(2000);
+                max += 1;
+
+                if (max == 3)
+                {
+                    break;
+                }
+            }
+
             Console.WriteLine("IPFS Daemon Started");
         }
 
@@ -134,6 +147,15 @@ namespace TrusChain.Storage
             {
                 process.Kill();
             }
+        }
+
+        public static bool isDaemonRunning()
+        {
+            foreach (var process in Process.GetProcessesByName("ipfs_daemon"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrusChain.Storage;
@@ -21,6 +23,17 @@ namespace TrusChain.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             IpfsWrapper.Init();
+
+            if (IpfsWrapper.isDaemonRunning())
+            {
+                lblStatus.Text = "IPFS Daemon Running...";
+                lblStatus.ForeColor = Color.Green;
+            }
+            else
+            {
+                lblStatus.Text = "IPFS Daemon Stopped";
+                lblStatus.ForeColor = Color.Red;
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -53,7 +66,7 @@ namespace TrusChain.Forms
         {
             if (!txtDownloadHash.Text.Equals(String.Empty))
             {
-                IpfsWrapper.Get(txtDownloadHash.Text, @"D:\file.pdf");
+                IpfsWrapper.Get(txtDownloadHash.Text, @"D:\file.docx");
             }
         }
     }

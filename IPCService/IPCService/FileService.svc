@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="IPCService.Service1" CodeBehind="FileService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="IPCService.FileService" CodeBehind="FileService.svc.cs" %>

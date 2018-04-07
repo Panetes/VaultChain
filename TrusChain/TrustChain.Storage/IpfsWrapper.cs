@@ -64,7 +64,7 @@ namespace TrusChain.Storage
         {
             foreach (var process in Process.GetProcessesByName("ipfs_daemon"))
             {
-                process.Kill();
+                return;
             }
 
             _process = new Process();
@@ -97,18 +97,16 @@ namespace TrusChain.Storage
             }
         }
 
-        public async void Get(string Hash)
+        public async void Get(string hash, string filePath)
         {
             using (var httpClient = new HttpClient() { Timeout = Timeout.InfiniteTimeSpan })
             using (var ipfs = new IpfsClient(new Uri("http://127.0.0.1:5001"), httpClient))
             {
                 try
                 {
-                    Stream outputStream = await ipfs.Cat(Hash);
-                    FileStream writeStream = new FileStream(_path + "\\file", FileMode.Create, FileAccess.Write);
+                    Stream outputStream = await ipfs.Cat(hash);
+                    FileStream writeStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
                     ReadWriteStream(outputStream, writeStream);
-
-                    Process.Start(_path + "\\file");
                 }
                 catch (Exception ex)
                 {

@@ -40,7 +40,7 @@ namespace TrusChain.Forms
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            storage.Dispose();
+            //storage.Dispose();
         }
 
         private async void btnUpload_Click(object sender, EventArgs e)
@@ -68,7 +68,7 @@ namespace TrusChain.Forms
         {
             if (!txtDownloadHash.Text.Equals(String.Empty))
             {
-                storage.Get(txtDownloadHash.Text);
+                storage.Get(txtDownloadHash.Text, @"D:\file.pdf");
             }
         }
     }

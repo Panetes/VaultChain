@@ -25,6 +25,7 @@ namespace TrusChain.Storage
                 return @"D:\";
             }
 
+
         }
 
         public static void Init()
@@ -55,7 +56,6 @@ namespace TrusChain.Storage
                
             }
 
-  
         }
 
         private static void StartDaemon()

@@ -13,29 +13,14 @@ namespace TrusChain.Forms
 {
     public partial class frmMain : Form
     {
-
-         Storage.IpfsWrapper storage;
         public frmMain()
         {
             InitializeComponent();
-            storage = new IpfsWrapper();
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            //try
-            //{
-               
-            storage.Init();
-            //    string hash = await storage.Add(@"C:\Users\JuniorCarvalho\Desktop\block.txt");
-            //    Console.WriteLine("Your Hash is: " + hash);
-
-            //    Console.ReadLine();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+            IpfsWrapper.Init();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -47,7 +32,7 @@ namespace TrusChain.Forms
         {
             if (System.IO.File.Exists(txtFile.Text))
             {
-                string hash = await storage.Add(txtFile.Text);
+                string hash = await IpfsWrapper.Add(txtFile.Text);
                 txtHash.Text = hash;
                 txtFile.Text = "";
             }
@@ -68,7 +53,7 @@ namespace TrusChain.Forms
         {
             if (!txtDownloadHash.Text.Equals(String.Empty))
             {
-                storage.Get(txtDownloadHash.Text, @"D:\file.pdf");
+                IpfsWrapper.Get(txtDownloadHash.Text, @"D:\file.pdf");
             }
         }
     }

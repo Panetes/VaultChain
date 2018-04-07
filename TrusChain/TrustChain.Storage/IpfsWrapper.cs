@@ -11,25 +11,23 @@ using System.Threading.Tasks;
 
 namespace TrusChain.Storage
 {
-    public class IpfsWrapper : IDisposable
+    public static class IpfsWrapper
     {
-        private Process _process;
-        private string _path;
 
-        public IpfsWrapper()
+        private static string GetLocalPath()
         {
             try
             {
-                _path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             }
             catch (Exception)
             {
-                _path = @"D:\";
+                return @"D:\";
             }
-            
+
         }
 
-        public void Init()
+        public static void Init()
         {
             try
             {
@@ -39,8 +37,8 @@ namespace TrusChain.Storage
             {
                 try
                 {
-                    _process = new Process();
-                    _process.StartInfo.FileName = string.Format("{0}\\ipfs_daemon.exe", _path);
+                    Process _process = new Process();
+                    _process.StartInfo.FileName = string.Format("{0}\\ipfs_daemon.exe", GetLocalPath());
                     _process.StartInfo.Arguments = "init";
                     _process.StartInfo.CreateNoWindow = true;
                     _process.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
@@ -60,15 +58,15 @@ namespace TrusChain.Storage
   
         }
 
-        private void StartDaemon()
+        private static void StartDaemon()
         {
             foreach (var process in Process.GetProcessesByName("ipfs_daemon"))
             {
                 return;
             }
 
-            _process = new Process();
-            _process.StartInfo.FileName = string.Format("{0}\\ipfs_daemon.exe", _path);
+            Process _process = new Process();
+            _process.StartInfo.FileName = string.Format("{0}\\ipfs_daemon.exe", GetLocalPath());
             _process.StartInfo.Arguments = "daemon";
             _process.StartInfo.CreateNoWindow= true;
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -79,7 +77,7 @@ namespace TrusChain.Storage
             Console.WriteLine("IPFS Daemon Started");
         }
 
-        public async Task<string> Add(string fileName)
+        public static async Task<string> Add(string fileName)
         {
             using (var httpClient = new HttpClient() { Timeout = Timeout.InfiniteTimeSpan })
             using (var ipfs = new IpfsClient(new Uri("http://127.0.0.1:5001"), httpClient))
@@ -97,7 +95,7 @@ namespace TrusChain.Storage
             }
         }
 
-        public async void Get(string hash, string filePath)
+        public static async void Get(string hash, string filePath)
         {
             using (var httpClient = new HttpClient() { Timeout = Timeout.InfiniteTimeSpan })
             using (var ipfs = new IpfsClient(new Uri("http://127.0.0.1:5001"), httpClient))
@@ -116,7 +114,7 @@ namespace TrusChain.Storage
             }               
         }
 
-        private void ReadWriteStream(Stream readStream, Stream writeStream)
+        private static void ReadWriteStream(Stream readStream, Stream writeStream)
         {
             int Length = 256;
             Byte[] buffer = new Byte[Length];
@@ -130,7 +128,7 @@ namespace TrusChain.Storage
             writeStream.Close();
         }
 
-        public void Dispose()
+        public static void CloseDaemon()
         {
             foreach (var process in Process.GetProcessesByName("ipfs_daemon"))
             {
